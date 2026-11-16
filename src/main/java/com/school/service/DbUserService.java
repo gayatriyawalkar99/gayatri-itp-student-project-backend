@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.school.dto.LoginDto;
 import com.school.dto.RegisterUserDto;
 import com.school.exception.UserCustomException;
 import com.school.model.DbUser;
@@ -25,7 +26,7 @@ public class DbUserService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
+	
 	public void registerUser(RegisterUserDto registerUserDto) {
 		DbUser user = dbUserRepository.findByUsername(registerUserDto.getUsername());
 		if (user != null)
@@ -50,6 +51,14 @@ public class DbUserService {
 
 	public List<Role> getAllRoles() {
 		return roleRepository.findAll();
+	}
+
+	public boolean userLogin(LoginDto loginDto) {
+		DbUser user = dbUserRepository.findByUsername(loginDto.getUsername());
+		if (user == null) {
+			return false;
+		}
+		return passwordEncoder.matches(loginDto.getPassword(), user.getPassword());
 	}
 
 }

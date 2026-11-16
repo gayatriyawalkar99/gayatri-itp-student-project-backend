@@ -27,27 +27,9 @@ public class SecurityConfig {
 						.requestMatchers("/deleteStudentById/**", "/updateStudentById/**", "/updateStudentPhoto/**")
 						.hasAuthority("ADMIN")
 
-						.requestMatchers("/registerUser", "/getAllRoles").permitAll()
+						.requestMatchers("/registerUser", "/getAllRoles", "/userLogin").permitAll()
 
 						.anyRequest().authenticated())
-
-				.formLogin(form -> form.loginProcessingUrl("/login")
-
-						.successHandler((request, response, authentication) -> {
-							response.setStatus(200);
-							response.setContentType("application/json");
-
-							response.getWriter().write("{\"message\":\"Login successful\"}");
-						})
-
-						.failureHandler((request, response, exception) -> {
-							response.setStatus(401);
-							response.setContentType("application/json");
-
-							response.getWriter().write("{\"message\":\"Invalid username or password\"}");
-						})
-
-						.permitAll())
 
 				.logout(logout -> logout.logoutSuccessUrl("/login").permitAll())
 

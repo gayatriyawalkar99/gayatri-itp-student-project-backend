@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.school.dto.LoginDto;
 import com.school.dto.RegisterUserDto;
 import com.school.model.Role;
 import com.school.service.DbUserService;
@@ -31,6 +32,16 @@ public class DbUserController {
 	@GetMapping("/getAllRoles")
 	public ResponseEntity<List<Role>> getAllRoles() {
 		return new ResponseEntity<List<Role>>(dbUserService.getAllRoles(), HttpStatus.OK);
+	}
+	
+	@PostMapping("/userLogin")
+	public ResponseEntity<String> userLogin(@RequestBody @Valid LoginDto loginDto) {
+		boolean isValid = dbUserService.userLogin(loginDto);
+
+		if (isValid)
+			return new ResponseEntity<String>("Logged in Successfully", HttpStatus.OK);
+
+		return new ResponseEntity<String>("Invalid Username or Password", HttpStatus.UNAUTHORIZED);
 	}
 
 }
