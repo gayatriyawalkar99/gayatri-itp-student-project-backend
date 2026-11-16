@@ -15,6 +15,8 @@ import com.school.dto.RegisterUserDto;
 import com.school.model.Role;
 import com.school.service.DbUserService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @RestController
@@ -35,8 +37,9 @@ public class DbUserController {
 	}
 	
 	@PostMapping("/userLogin")
-	public ResponseEntity<String> userLogin(@RequestBody @Valid LoginDto loginDto) {
-		boolean isValid = dbUserService.userLogin(loginDto);
+	public ResponseEntity<String> userLogin(@RequestBody @Valid LoginDto loginDto, HttpServletRequest request,
+			HttpServletResponse response) {
+		boolean isValid = dbUserService.userLogin(loginDto, request, response);
 
 		if (isValid)
 			return new ResponseEntity<String>("Logged in Successfully", HttpStatus.OK);
